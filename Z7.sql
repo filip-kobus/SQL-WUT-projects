@@ -1,14 +1,20 @@
 /*
 Filip Kobus 331703
 Z7, grupa wtorkowa
+
+StworzyÄ‡ 3 tabele opisane w pliku Excel
+
+I trigery
 */
+
+
 
 ---------------------------------------------------------------------------
 --TWORZE TABELE
 ---------------------------------------------------------------------------
 
 
---Tworzê tabelê TOWAR
+--Tworze tabele TOWAR
 IF NOT EXISTS (
 	SELECT 1
 		FROM sysobjects o
@@ -26,7 +32,7 @@ END
 GO
 
 
---Tworzê tabelê ZAKUPY
+--Tworze tabele ZAKUPY
 IF NOT EXISTS (
 	SELECT 1
 		FROM sysobjects o
@@ -43,7 +49,7 @@ BEGIN
 END
 GO
 
---Tworzê tabelê WYD_Z_MAG
+--Tworze tabele WYD_Z_MAG
 IF NOT EXISTS (
 	SELECT 1
 		FROM sysobjects o
@@ -62,12 +68,12 @@ GO
 
 
 ---------------------------------------------------------------------------
---TWORZÊ TRIGGERY
+--TWORZE TRIGGERY
 ---------------------------------------------------------------------------
 
 
 --1. Triggery do towaru
--- Tworzê trigger na tabelê TOWAR, który po insercie ustawia LICZBA_ZAK i LICZBA_DOSTEPNYCH na 0
+-- TworzÃª trigger na tabele TOWAR, ktÃ³ry po insercie ustawia LICZBA_ZAK i LICZBA_DOSTEPNYCH na 0
 CREATE TRIGGER dbo.trg_AfterInsert_TOWAR
 ON TOWAR
 AFTER INSERT
@@ -80,8 +86,8 @@ BEGIN
 END;
 GO
 
--- Tworzê trigger na tabelê TOWAR, który przy aktualizacji sprawdza, czy LICZBA_DOSTEPNYCH jest nieujemna
--- i czy LICZBA_DOSTEPNYCH jest wiêksza od LICZBA_ZAK
+-- Tworze trigger na tabele TOWAR, ktÃ³ry przy aktualizacji sprawdza, czy LICZBA_DOSTEPNYCH jest nieujemna
+-- i czy LICZBA_DOSTEPNYCH jest wiÃªksza od LICZBA_ZAK
 CREATE TRIGGER dbo.trg_AfterUpdate_TOWAR
 ON TOWAR
 INSTEAD OF UPDATE
@@ -92,7 +98,7 @@ BEGIN
         WHERE LICZBA_DOSTEPNYCH < 0 OR LICZBA_DOSTEPNYCH > LICZBA_ZAK
     )
     BEGIN
-        PRINT 'LICZBA_DOSTEPNYCH nie mo¿e byæ ujemna lub wiêksza od LICZBA_ZAK';
+        PRINT 'LICZBA_DOSTEPNYCH nie moÂ¿e byÃ¦ ujemna lub wiÃªksza od LICZBA_ZAK';
         ROLLBACK TRANSACTION;
     END
     ELSE
@@ -108,7 +114,7 @@ END;
 GO
 
 
--- 2. Triggery do Zakupów
+-- 2. Triggery do ZakupÃ³w
 CREATE TRIGGER dbo.trg_AfterInsert_ZAKUPY
 ON ZAKUPY
 AFTER INSERT
@@ -129,7 +135,7 @@ ON ZAKUPY
 AFTER UPDATE
 AS
 BEGIN
-	--Jedyna mo¿liwa kolejnoœæ operacji, inaczej za³¹czy siê trigger zabezpieczaj¹cy
+	--Jedyna moÂ¿liwa kolejnoÅ“Ã¦ operacji, inaczej zaÂ³Â¹czy siÃª trigger zabezpieczajÂ¹cy
 	UPDATE TOWAR
     SET LICZBA_DOSTEPNYCH = LICZBA_DOSTEPNYCH
 		- ISNULL((SELECT SUM(ilosc) FROM deleted WHERE TOWAR.ID_TOW=deleted.ID_TOW), 0)
@@ -201,12 +207,12 @@ GO
 
 
 ---------------------------------------------------------------------------
---SPRAWDZAM POPRAWNOŒÆ TRIGGERÓW
+--SPRAWDZAM POPRAWNOÅ’Ã† TRIGGERÃ“W
 ---------------------------------------------------------------------------
 
-/*Najpierw muszê usun¹æ wydane z magazynu, dopiero potem zakupy, inaczej aktywuje siê trigger*/
+/*Najpierw musze usunac wydane z magazynu, dopiero potem zakupy, inaczej aktywuje sie trigger*/
 
--- to nic nie zmienia ale mo¿na wykorzystaæ do czyszczenia tabel
+-- to nic nie zmienia ale mozna wykorzystaÃ¦ do czyszczenia tabel
 DELETE FROM WYD_Z_MAG;
 DELETE FROM ZAKUPY
 
@@ -214,7 +220,7 @@ DELETE FROM ZAKUPY
 INSERT INTO TOWAR (ID_TOW, Nazwa_tow)
 VALUES 
     (1, 'Kaszanka'),
-    (2, 'Kie³basa'),
+    (2, 'KieÂ³basa'),
     (3, 'Boczek'),
     (4, 'Antrykot'),
     (5, 'Pasztet');
@@ -238,14 +244,14 @@ VALUES
     (6, 5, 3);
 
 /*
-TOW1: kupiono 15 sztuk, wydano 8, zosta³o 7
-TOW4: kupiono 2 sztuki, wydano 2, zosta³o 0
-TOW5: kupiono 20 sztuk, wydano 7, zosta³o 13
+TOW1: kupiono 15 sztuk, wydano 8, zostaÂ³o 7
+TOW4: kupiono 2 sztuki, wydano 2, zostaÂ³o 0
+TOW5: kupiono 20 sztuk, wydano 7, zostaÂ³o 13
 
 Nazwa_Towaru              ID_TOW      LICZBA_ZAK  LICZBA_DOSTEPNYCH
 ------------------------- ----------- ----------- -----------------
 Kaszanka                  1           15          7
-Kie³basa                  2           0           0
+KieÂ³basa                  2           0           0
 Boczek                    3           0           0
 Antrykot                  4           2           0
 Pasztet                   5           20          13
@@ -259,13 +265,13 @@ VALUES
 
 
 /*
-Towar 1 zwiêksza siê o 3
-Towar 5 zwiêksza siê o 8
+Towar 1 zwiÃªksza siÃª o 3
+Towar 5 zwiÃªksza siÃª o 8
 
 Nazwa_Towaru              ID_TOW      LICZBA_ZAK  LICZBA_DOSTEPNYCH
 ------------------------- ----------- ----------- -----------------
 Kaszanka                  1           18          10
-Kie³basa                  2           0           0
+KieÂ³basa                  2           0           0
 Boczek                    3           0           0
 Antrykot                  4           2           0
 Pasztet                   5           28          21
@@ -276,13 +282,13 @@ DELETE FROM ZAKUPY
 WHERE ID_TOW = 5 AND ilosc = 8
 
 /*
-Poniewa¿ by³y dwa zakupy towaru 5 po 8 sztuk
-Usuniêto z tabeli towar 16 pasztetów
+PoniewaÂ¿ byÂ³y dwa zakupy towaru 5 po 8 sztuk
+UsuniÃªto z tabeli towar 16 pasztetÃ³w
 
 Nazwa_Towaru              ID_TOW      LICZBA_ZAK  LICZBA_DOSTEPNYCH
 ------------------------- ----------- ----------- -----------------
 Kaszanka                  1           18          10
-Kie³basa                  2           0           0
+KieÂ³basa                  2           0           0
 Boczek                    3           0           0
 Antrykot                  4           2           0
 Pasztet                   5           12          5
@@ -298,12 +304,12 @@ Zmieniono 3 wiersze dla ID_TOW = 1
 z ilosc 2 -> 1
 z ilosc 3 -> 1
 z ilosc 3 -> 1
-wiêc liczba dostêpnych i zakupionych kaszanek zmniejsza siê o 5
+wiÃªc liczba dostÃªpnych i zakupionych kaszanek zmniejsza siÃª o 5
 
 Nazwa_Towaru              ID_TOW      LICZBA_ZAK  LICZBA_DOSTEPNYCH
 ------------------------- ----------- ----------- -----------------
 Kaszanka                  1           13          5
-Kie³basa                  2           0           0
+KieÂ³basa                  2           0           0
 Boczek                    3           0           0
 Antrykot                  4           2           0
 Pasztet                   5           12          5
@@ -321,7 +327,7 @@ Wydano 2 pasztety i 3 kaszanki
 Nazwa_Towaru              ID_TOW      LICZBA_ZAK  LICZBA_DOSTEPNYCH
 ------------------------- ----------- ----------- -----------------
 Kaszanka                  1           13          2
-Kie³basa                  2           0           0
+KieÂ³basa                  2           0           0
 Boczek                    3           0           0
 Antrykot                  4           2           0
 Pasztet                   5           12          3
@@ -332,12 +338,12 @@ DELETE FROM WYD_Z_MAG
 WHERE ID_TOW = 4
 
 /*
-Usun¹³em wydanie z magazynu antrykotów, wiêc teraz wszystkie zakupione s¹ dostêpne
+UsunÂ¹Â³em wydanie z magazynu antrykotÃ³w, wiÃªc teraz wszystkie zakupione sÂ¹ dostÃªpne
 
 Nazwa_Towaru              ID_TOW      LICZBA_ZAK  LICZBA_DOSTEPNYCH
 ------------------------- ----------- ----------- -----------------
 Kaszanka                  1           13          2
-Kie³basa                  2           0           0
+KieÂ³basa                  2           0           0
 Boczek                    3           0           0
 Antrykot                  4           2           2
 Pasztet                   5           12          3
@@ -349,13 +355,13 @@ SET ilosc = 2
 WHERE ID_TOW = 5
 
 /*
-Poniewa¿ s¹ 3 wydania kaszanki, a ka¿dy z nich zmieni³em na 2
+PoniewaÂ¿ sÂ¹ 3 wydania kaszanki, a kaÂ¿dy z nich zmieniÂ³em na 2
 to liczba wydanych kaszanek wynosi 6
 
 Nazwa_Towaru              ID_TOW      LICZBA_ZAK  LICZBA_DOSTEPNYCH
 ------------------------- ----------- ----------- -----------------
 Kaszanka                  1           13          2
-Kie³basa                  2           0           0
+KieÂ³basa                  2           0           0
 Boczek                    3           0           0
 Antrykot                  4           2           2
 Pasztet                   5           12          6
@@ -367,9 +373,9 @@ VALUES
     (9, 1, 3);
 
 /*
-Poniewa¿ dostêpne s¹ tylko 2 kaszanki, nie mogê wydaæ 3
+PoniewaÂ¿ dostÃªpne sÂ¹ tylko 2 kaszanki, nie mogÃª wydaÃ¦ 3
 
-LICZBA_DOSTEPNYCH nie mo¿e byæ ujemna lub wiêksza od LICZBA_ZAK
+LICZBA_DOSTEPNYCH nie moÂ¿e byÃ¦ ujemna lub wiÃªksza od LICZBA_ZAK
 Msg 3609, Level 16, State 1, Procedure trg_AfterInsert_WYDZ_MAG, Line 6
 The transaction ended in the trigger. The batch has been aborted.
 */
