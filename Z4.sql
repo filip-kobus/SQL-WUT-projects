@@ -4,10 +4,10 @@ Filip Kobus, 331703, 26.03.2024
 
 /*
 Z4.1
-najwiêksza pensja z etatów osób o nazwisku na (wybraæ literkê) z miasta o nazwie na literkê (wybraæ)
+najwiÄ™ksza pensja z etatÃ³w osÃ³b o nazwisku na (wybraÄ‡ literkÄ™) z miasta o nazwie na literkÄ™ (wybraÄ‡)
 */
 
-SELECT LEFT(o.IMIÊ, 20) as Imiê, LEFT(o.NAZWISKO, 20) as Nazwisko, e.pensja as Pensja, LEFT(m.nazwa, 20) as Miasto
+SELECT LEFT(o.IMIÄ˜, 20) as ImiÄ™, LEFT(o.NAZWISKO, 20) as Nazwisko, e.pensja as Pensja, LEFT(m.nazwa, 20) as Miasto
 FROM etaty e
 JOIN osoby o ON e.id_osoby = o.id_osoby
 JOIN miasta m ON m.id_miasta = o.id_miasta
@@ -22,23 +22,23 @@ WHERE e.pensja = (
 AND o.nazwisko LIKE 'O%'
 AND m.nazwa LIKE 'S%'
 
--- Osoba z nazwiskiem na literê O z miasta na literê S:
+-- Osoba z nazwiskiem na literÄ™ O z miasta na literÄ™ S:
 
 /*
-Imiê                 Nazwisko            Pensja      Miasto
+ImiÄ™                 Nazwisko            Pensja      Miasto
 -------------------- -------------------- ----------- --------------------
-Marta                Ornafa               9000        Suwa³ki
+Marta                Ornafa               9000        SuwaÅ‚ki
 
 (1 row(s) affected)
 */
 
--- W bazie jest jeszcze Jakub Piotrowski ze Szczecina z pensj¹ 9000
--- Doda³em te¿ Marcina Ochockiego z Lublina z pensj¹ 9000
+-- W bazie jest jeszcze Jakub Piotrowski ze Szczecina z pensjÄ… 9000
+-- DodaÅ‚em teÅ¼ Marcina Ochockiego z Lublina z pensjÄ… 9000
 -- Magdalena Olejnik z Siedlc zarabia 8500
 
 /*
 Z4.2
-policzyæ najwiêksz¹ pensjê w kazdej z firm ³¹cznie z archwiwalnymi etatami
+policzyÄ‡ najwiÄ™kszÄ… pensjÄ™ w kazdej z firm Å‚Ä…cznie z archwiwalnymi etatami
 */
 
 SELECT LEFT(f.nazwa, 30) AS Nazwa_firmy, e.pensja AS Najwyzsza_pensja
@@ -65,7 +65,7 @@ AlphaWave Technologies         9000
 
 /*
 Z4.3
-znalezc województwa w których nie ma firmy z etatem o pensji wiêkszej ni¿ X (wybraæ)
+znalezc wojewÃ³dztwa w ktÃ³rych nie ma firmy z etatem o pensji wiÄ™kszej niÅ¼ X (wybraÄ‡)
 */
 
 DECLARE @X int = 5000
@@ -87,9 +87,9 @@ WHERE NOT EXISTS
 Wojewodztwo
 -------------------------
 POMORSKIE
-ŒWIÊTOKRZYSKIE
+ÅšWIÄ˜TOKRZYSKIE
 
 (2 row(s) affected)
 
--- W Œwiêtokrzyskim w ogóle nie ma etatów
+-- W ÅšwiÄ™tokrzyskim w ogÃ³le nie ma etatÃ³w
 */
