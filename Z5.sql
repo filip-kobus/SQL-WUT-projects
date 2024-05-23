@@ -2,8 +2,8 @@
 Filip Kobus 331703
 Z5.1
 
-Pokazaæ MAX pensjê w kazej z firm ale tylko w tych w których œrednia pensja (AVG) jest
-pomiêdzy A_MIN a A_MAX - proszê sobie wybraæ
+PokazaÃ¦ MAX pensjÃª w kazej z firm ale tylko w tych w ktÃ³rych Å“rednia pensja (AVG) jest
+pomiÃªdzy A_MIN a A_MAX - proszÃª sobie wybraÃ¦
 */
 
 DECLARE @A_MIN int = 5000
@@ -24,14 +24,14 @@ TechnoSoft Solutions           8700
 
 /*
 Z5.2
-Proszê pokazaæ która osoba ma najwiêcej etatów w bazie
+ProszÃª pokazaÃ¦ ktÃ³ra osoba ma najwiÃªcej etatÃ³w w bazie
 Wymaga zapytania z grupowaniem i szukania po wyniku
 */
 
-SELECT LEFT(o.IMIÊ, 20) as Imie, LEFT(o.NAZWISKO, 20) as Nazwisko, COUNT(o.id_osoby) AS Liczba_Etatów
+SELECT LEFT(o.IMIÃŠ, 20) as Imie, LEFT(o.NAZWISKO, 20) as Nazwisko, COUNT(o.id_osoby) AS Liczba_EtatÃ³w
 FROM etaty e
 JOIN osoby o ON o.id_osoby = e.id_osoby
-GROUP BY o.IMIÊ, o.NAZWISKO
+GROUP BY o.IMIÃŠ, o.NAZWISKO
 HAVING COUNT(o.id_osoby) = (
 	SELECT MAX(L_Etatow)
 	FROM (
@@ -42,7 +42,7 @@ HAVING COUNT(o.id_osoby) = (
 )
 
 /*
-Imie                 Nazwisko             Liczba_Etatów
+Imie                 Nazwisko             Liczba_EtatÃ³w
 -------------------- -------------------- -------------
 Anna                 Nowak                4
 */
@@ -50,25 +50,25 @@ Anna                 Nowak                4
 /*
 Z5.3
 
-Proszê dodaæ tabelê
+ProszÃª dodaÃ¦ tabelÃª
 CECHY (idc nchar(4) not null constraint PK_CECHY, opis nvarchar(100) not null)
 
 Wpisac rekordy
 N, Najlepszy
-NZ, Najwiêksze zarobki
+NZ, NajwiÃªksze zarobki
 SK, Super koledzy
-£P, £atwe pieni¹dze
-SA, Super Zespó³
+Â£P, Â£atwe pieniÂ¹dze
+SA, Super ZespÃ³Â³
 K, Kierownicze
 
 i jeszcze ze 3
 
-I stworzyæ tabele ETATY_CECHY (id_etatu, idc)
-obydwa jako klucze obce do tabel ETATY orac CECHY a klucz g³owny jako para id_etatu, idc
+I stworzyÃ¦ tabele ETATY_CECHY (id_etatu, idc)
+obydwa jako klucze obce do tabel ETATY orac CECHY a klucz gÂ³owny jako para id_etatu, idc
 
-Stworzyæ zapytanie pokazuj¹ce etaty maj¹ce cechy SK, £P, NZ  - wszystkie trzy musz¹ mieæ
-Oraz etaty maj¹ce wszystkie powy¿sze (+ WW + OC) lub mniej
-posortowaæ w kolejnoœci od etatów maj¹cych najwiêcej wybranych cech
+StworzyÃ¦ zapytanie pokazujÂ¹ce etaty majÂ¹ce cechy SK, Â£P, NZ  - wszystkie trzy muszÂ¹ mieÃ¦
+Oraz etaty majÂ¹ce wszystkie powyÂ¿sze (+ WW + OC) lub mniej
+posortowaÃ¦ w kolejnoÅ“ci od etatÃ³w majÂ¹cych najwiÃªcej wybranych cech
 */
 
 IF NOT EXISTS (
@@ -87,14 +87,14 @@ GO
 
 /*
 INSERT INTO Cechy (idc, opis) VALUES (N'N',N'Najlepszy')
-INSERT INTO Cechy (idc, opis) VALUES (N'NZ',N'Najwiêksze zarobki')
+INSERT INTO Cechy (idc, opis) VALUES (N'NZ',N'NajwiÃªksze zarobki')
 INSERT INTO Cechy (idc, opis) VALUES (N'SK',N'Super koledzy')
-INSERT INTO Cechy (idc, opis) VALUES (N'£P',N'£atwe pieni¹dze')
-INSERT INTO Cechy (idc, opis) VALUES (N'SA',N'Super zespó³')
+INSERT INTO Cechy (idc, opis) VALUES (N'Â£P',N'Â£atwe pieniÂ¹dze')
+INSERT INTO Cechy (idc, opis) VALUES (N'SA',N'Super zespÃ³Â³')
 INSERT INTO Cechy (idc, opis) VALUES (N'K',N'Kierownicze')
 INSERT INTO Cechy (idc, opis) VALUES (N'OC',N'Owocowe czwartki')
 INSERT INTO Cechy (idc, opis) VALUES (N'WW',N'Warzywne wtorki')
-INSERT INTO Cechy (idc, opis) VALUES (N'PZP',N'Pi¹tki z pupilem')
+INSERT INTO Cechy (idc, opis) VALUES (N'PZP',N'PiÂ¹tki z pupilem')
 */
 
 IF NOT EXISTS (
@@ -124,39 +124,39 @@ INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (4, N'K')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (5, N'SA')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (6, N'OC')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (7, N'WW')
-INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (8, N'£P')
+INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (8, N'Â£P')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (9, N'K')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (10, N'PZP')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (11, N'NZ')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (12, N'K')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (13, N'N')
-INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (14, N'£P')
+INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (14, N'Â£P')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (15, N'SA')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (16, N'SK')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (17, N'OC')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (18, N'WW')
 ---------------------------------------------------------
-INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (1, N'£P')
+INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (1, N'Â£P')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (1, N'SK')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (1, N'NZ')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (1, N'OC')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (1, N'WW')
-INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (2, N'£P')
+INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (2, N'Â£P')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (3, N'SK')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (2, N'NZ')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (3, N'OC')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (3, N'WW')
-INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (4, N'£P')
+INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (4, N'Â£P')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (5, N'SK')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (5, N'NZ')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (5, N'OC')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (5, N'WW')
-INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (6, N'£P')
+INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (6, N'Â£P')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (7, N'SK')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (7, N'NZ')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (7, N'OC')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (8, N'WW')
-INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (18, N'£P')
+INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (18, N'Â£P')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (17, N'SK')
 INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (9, N'NZ')
 */
@@ -164,7 +164,7 @@ INSERT INTO Etaty_Cechy (id_etatu, idc) VALUES (9, N'NZ')
 SELECT e.id_ETATU, LEFT(e.stanowisko, 35) as Stanowisko
 FROM etaty e
 JOIN Etaty_Cechy ec ON ec.id_etatu = e.id_ETATU
-WHERE ec.idc IN ('SK', '£P', 'NZ')
+WHERE ec.idc IN ('SK', 'Â£P', 'NZ')
 GROUP BY e.id_ETATU, e.stanowisko
 HAVING COUNT(DISTINCT ec.idc) = 3
 
@@ -178,7 +178,7 @@ id_ETATU    Stanowisko
 SELECT e.id_ETATU, LEFT(e.stanowisko, 35) as Stanowisko, COUNT(ec.idc) as liczba_cech
 FROM etaty e
 JOIN Etaty_Cechy ec ON ec.id_etatu = e.id_ETATU
-WHERE ec.idc IN ('SK', '£P', 'NZ', 'WW', 'OC')
+WHERE ec.idc IN ('SK', 'Â£P', 'NZ', 'WW', 'OC')
 GROUP BY e.id_ETATU, e.stanowisko
 ORDER BY COUNT(ec.idc) DESC
 
@@ -195,8 +195,8 @@ id_ETATU    Stanowisko                          liczba_cech
 17          Dyrektor ds. Informatyki            2
 18          Dyrektor ds. Marketingu             2
 9           Asystent                            1
-11          Asystent Zarz¹du                    1
-14          Dyrektor ds. Badañ i Rozwoju        1
+11          Asystent ZarzÂ¹du                    1
+14          Dyrektor ds. BadaÃ± i Rozwoju        1
 16          Dyrektor ds. Finansowych            1
 4           Programista                         1
 */
